@@ -48,6 +48,7 @@ app.*.map.json
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 /macos/Runner/GoogleService-Info.plist
+/lib/app/config/firebase_options.dart
 
 # Firebase emulators / local state
 .firebase/
