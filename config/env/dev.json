@@ -1,0 +1,8 @@
+{
+  "FLAVOR": "dev",
+  "APP_NAME": "Chess Dev",
+  "ENABLE_FIREBASE": "true",
+  "USE_FIREBASE_EMULATORS": "true",
+  "FIREBASE_PROJECT_ID": "chess-347ba",
+  "API_LOG_LEVEL": "debug"
+}

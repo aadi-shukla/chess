@@ -1,0 +1,70 @@
+name: chess
+description: Production-ready cross-platform chess application with offline and online play.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cloud_firestore: ^5.6.11
+  cloud_functions: ^5.6.1
+  connectivity_plus: ^6.1.4
+  cupertino_icons: ^1.0.8
+  firebase_auth: ^5.6.2
+  firebase_core: ^3.15.1
+  get: ^4.7.2
+  google_fonts: ^6.2.1
+  google_sign_in: ^6.3.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  intl: ^0.20.2
+  logger: ^2.5.0
+  responsive_framework: ^1.5.1
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.14.4
+  build_runner: ^2.4.15
+  fake_cloud_firestore: ^3.1.0
+  firebase_auth_mocks: ^0.14.2
+  freezed: ^3.0.6
+  json_serializable: ^6.9.5
+  mocktail: ^1.0.4
+  very_good_analysis: ^7.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/pieces/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icon/app_icon.png
+  min_sdk_android: 21
+  adaptive_icon_background: "#1B4332"
+  adaptive_icon_foreground: assets/icon/app_icon.png
+  web:
+    generate: true
+    image_path: assets/icon/app_icon.png
+    background_color: "#1B4332"
+    theme_color: "#1B4332"
+  windows:
+    generate: true
+    image_path: assets/icon/app_icon.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: assets/icon/app_icon.png

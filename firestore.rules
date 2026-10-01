@@ -1,0 +1,139 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isGameParticipant(game) {
+      return isSignedIn() && (
+        request.auth.uid == game.data.whiteUid ||
+        request.auth.uid == game.data.blackUid
+      );
+    }
+
+    function isValidUserCreate() {
+      return request.resource.data.keys().hasAll([
+          'email', 'displayName', 'rating', 'stats', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'email', 'displayName', 'rating', 'stats', 'createdAt', 'updatedAt',
+          'isAnonymous', 'photoUrl'
+        ])
+        && !request.resource.data.keys().hasAny(['activeGameId', 'globalRank'])
+        && request.resource.data.rating == 1200
+        && request.resource.data.stats.played == 0
+        && request.resource.data.stats.wins == 0
+        && request.resource.data.stats.losses == 0
+        && request.resource.data.stats.draws == 0
+        && (!('isAnonymous' in request.resource.data)
+            || request.resource.data.isAnonymous is bool);
+    }
+
+    function userProtectedFields() {
+      return ['rating', 'stats', 'globalRank', 'activeGameId'];
+    }
+
+    function isValidHistoryEntry(userId) {
+      return request.resource.data.keys().hasAll([
+          'id', 'mode', 'result', 'moveCount', 'completedAt', 'ownerUid'
+        ])
+        && request.resource.data.ownerUid == userId
+        && request.resource.data.moveCount is int
+        && request.resource.data.moveCount >= 0
+        && request.resource.data.moveCount <= 500
+        && request.resource.data.result in [
+          'white_wins', 'black_wins', 'white_win', 'black_win',
+          'draw', 'win', 'loss'
+        ];
+    }
+
+    // ── users/{uid} ────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId) && isValidUserCreate();
+
+      allow update: if isOwner(userId)
+        && !request.resource.data.diff(resource.data)
+            .affectedKeys().hasAny(userProtectedFields());
+
+      allow delete: if false;
+
+      match /settings/{document=**} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /games/{gameId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidOfflineGameCreate(userId);
+        allow update: if isOwner(userId)
+          && request.resource.data.ownerUid == userId
+          && request.resource.data.type == 'offline'
+          && request.resource.data.syncVersion is int
+          && request.resource.data.syncVersion >= resource.data.syncVersion;
+        allow delete: if isOwner(userId);
+      }
+
+      match /history/{entryId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidHistoryEntry(userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    function isValidOfflineGameCreate(userId) {
+      return request.resource.data.ownerUid == userId
+        && request.resource.data.type == 'offline'
+        && request.resource.data.syncVersion is int
+        && request.resource.data.keys().hasAll([
+          'id', 'ownerUid', 'type', 'status', 'syncVersion'
+        ]);
+    }
+
+    // ── games/{gameId} — active online games (Functions write) ─────────────
+
+    match /games/{gameId} {
+      allow read: if isGameParticipant(resource);
+      allow write: if false;
+    }
+
+    // ── matchmaking/{entryId} ──────────────────────────────────────────────
+
+    match /matchmaking/{entryId} {
+      allow read: if isSignedIn()
+        && resource.data.userId == request.auth.uid;
+
+      allow create: if false;
+
+      allow update: if false;
+
+      allow delete: if false;
+    }
+
+    // ── matchInvites/{code} — private rooms (Functions write) ────────────
+
+    match /matchInvites/{code} {
+      allow read: if isSignedIn()
+        && resource.data.hostUid == request.auth.uid;
+
+      allow write: if false;
+    }
+
+    // ── leaderboards/{boardId}/entries/{uid} — public read, Functions write
+
+    match /leaderboards/{boardId}/entries/{userId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,364 @@
+# Firebase Setup Guide — Chess App (Phase 3)
+
+Complete step-by-step instructions for configuring Firebase across all platforms.
+
+---
+
+## Prerequisites
+
+| Tool | Version | Install command |
+|------|---------|-----------------|
+| Node.js | 20 LTS | https://nodejs.org |
+| Firebase CLI | Latest | `npm install -g firebase-tools` |
+| FlutterFire CLI | Latest | `dart pub global activate flutterfire_cli` |
+| Flutter | 3.x stable | https://flutter.dev |
+| Java JDK | 17 | Required for Android builds |
+
+Add FlutterFire to PATH:
+```bash
+export PATH="$PATH:$HOME/.pub-cache/bin"
+```
+
+---
+
+## Step 1 — Firebase Console: Create Projects
+
+Create **three** Firebase projects (one per flavor):
+
+| Flavor | Project ID | Purpose |
+|--------|------------|---------|
+| dev | `chess-app-dev` | Local dev + emulators |
+| staging | `chess-app-staging` | QA / pre-release |
+| prod | `chess-app-prod` | Production users |
+
+### For each project at https://console.firebase.google.com:
+
+1. **Create a project** → name it (e.g. "Chess Dev")
+2. Enable **Google Analytics** (recommended)
+3. Select analytics account or create new
+
+---
+
+## Step 2 — Enable Authentication
+
+Console → **Build** → **Authentication** → **Get started**
+
+Enable sign-in providers:
+
+| Provider | Notes |
+|----------|-------|
+| **Email/Password** | Enable both Email/Password and Email link (optional) |
+| **Google** | Add support email; add SHA-1 for Android (see Step 6) |
+| **Apple** | Required on iOS if Google Sign-In is offered |
+| **Anonymous** | Enable for guest play |
+
+### User actions (required for register + guest play)
+
+Authentication → **Settings** → **User actions**:
+
+| Setting | Required |
+|---------|----------|
+| **Create (sign-up)** | **Enable** — guest play and registration both create accounts |
+| **Delete** | Optional |
+
+If **Create (sign-up)** is off, users see `auth/admin-restricted-operation`
+("This operation is restricted to administrators only").
+
+### Email verification (production)
+Authentication → Settings → User actions → enable email verification for prod.
+
+---
+
+## Step 3 — Create Firestore Database
+
+Console → **Build** → **Firestore Database** → **Create database**
+
+1. Start in **production mode** (rules deployed from `firestore.rules`)
+2. Choose region closest to users (e.g. `us-central1`, `europe-west1`)
+3. **Cannot change region later** — choose carefully
+
+---
+
+## Step 4 — Upgrade to Blaze Plan (Cloud Functions)
+
+Console → **Upgrade** (bottom left)
+
+Cloud Functions require the **Blaze (pay-as-you-go)** plan. You only pay for usage beyond free tier.
+
+---
+
+## Step 5 — Firebase CLI Login
+
+```bash
+firebase login
+```
+
+Opens browser for Google authentication. Use the account that owns the Firebase projects.
+
+Verify:
+```bash
+firebase projects:list
+```
+
+---
+
+## Step 6 — Automated Setup Script
+
+From project root:
+
+```bash
+./scripts/firebase_setup.sh dev
+```
+
+This script:
+1. Verifies Node.js, Firebase CLI, FlutterFire CLI
+2. Runs `firebase login`
+3. Links project alias in `.firebaserc`
+4. Runs `flutterfire configure` for all platforms
+5. Installs Cloud Functions dependencies
+
+### Manual FlutterFire configure (alternative)
+
+```bash
+flutterfire configure \
+  --project=chess-app-dev \
+  --out=lib/app/config/firebase_options.dart \
+  --platforms=android,ios,macos,web,windows \
+  --android-package-name=com.chessapp.chess \
+  --ios-bundle-id=com.chessapp.chess \
+  --macos-bundle-id=com.chessapp.chess
+```
+
+**What this generates:**
+
+| File | Platform |
+|------|----------|
+| `lib/app/config/firebase_options.dart` | All (Dart initialization) |
+| `android/app/google-services.json` | Android |
+| `ios/Runner/GoogleService-Info.plist` | iOS |
+| `macos/Runner/GoogleService-Info.plist` | macOS |
+| Web config embedded in `firebase_options.dart` | Web |
+| Windows config in `firebase_options.dart` | Windows |
+
+> `google-services.json` and `GoogleService-Info.plist` are gitignored. Use `.example` files as reference.
+
+---
+
+## Step 7 — Android Configuration
+
+### 7a. google-services plugin (already configured)
+
+`android/settings.gradle.kts` includes:
+```kotlin
+id("com.google.gms.google-services") version "4.4.2" apply false
+```
+
+`android/app/build.gradle.kts` applies plugin only when `google-services.json` exists.
+
+### 7b. SHA-1 fingerprint (required for Google Sign-In)
+
+```bash
+cd android && ./gradlew signingReport
+```
+
+Copy **SHA-1** from the `devDebug` variant → Firebase Console → Project Settings → Your apps → Android → Add fingerprint.
+
+Repeat for release keystore before production.
+
+### 7c. Package names per flavor
+
+| Flavor | Application ID |
+|--------|----------------|
+| dev | `com.chessapp.chess.dev` |
+| staging | `com.chessapp.chess.staging` |
+| prod | `com.chessapp.chess` |
+
+Register **each** Android app in Firebase Console, or run `flutterfire configure` per flavor.
+
+---
+
+## Step 8 — iOS Configuration
+
+### 8a. GoogleService-Info.plist
+
+Generated by FlutterFire into `ios/Runner/GoogleService-Info.plist`.
+
+### 8b. Xcode capabilities
+
+Open `ios/Runner.xcworkspace` in Xcode:
+
+1. **Signing & Capabilities** → select your Team
+2. For Apple Sign-In: add **Sign in with Apple** capability
+3. For push (later): enable **Push Notifications**
+
+### 8c. URL schemes (Google Sign-In)
+
+Add reversed client ID from `GoogleService-Info.plist` to `CFBundleURLTypes` in `Info.plist` (FlutterFire may do this automatically).
+
+### 8d. iOS flavor xcconfigs
+
+Pre-created in `ios/Flutter/{dev,staging,prod}.xcconfig` — map to Xcode build configurations manually or via schemes.
+
+---
+
+## Step 9 — Web Configuration
+
+### 9a. Register web app
+
+Firebase Console → Project Settings → Add app → Web
+
+FlutterFire embeds config in `firebase_options.dart` — no separate `firebase-config.js` needed.
+
+### 9b. Authorized domains
+
+Authentication → Settings → Authorized domains:
+
+- `localhost` (dev)
+- Your production domain (e.g. `chess.example.com`)
+
+### 9c. Run web with emulators
+
+```bash
+flutter run -d chrome \
+  -t lib/main_dev.dart \
+  --dart-define-from-file=config/env/dev.json
+```
+
+---
+
+## Step 10 — Desktop (macOS / Windows)
+
+### macOS
+- `GoogleService-Info.plist` in `macos/Runner/`
+- Enable Keychain Sharing if using auth persistence
+
+### Windows
+- Uses `firebase_options.dart` only — no extra plist/json
+- Firebase Auth on Windows requires recent `firebase_auth` plugin
+
+### Linux
+- **Not supported** by Firebase SDK — Linux builds run without Firebase
+
+---
+
+## Step 11 — Deploy Security Rules & Indexes
+
+```bash
+./scripts/deploy_firebase.sh dev firestore
+```
+
+Or manually:
+```bash
+firebase use chess-app-dev
+firebase deploy --only firestore:rules,firestore:indexes
+```
+
+### Rules file: `firestore.rules`
+- Users can read/write own profile (except `rating`, `stats`)
+- Games: read-only for participants; writes via Cloud Functions only
+- Matchmaking: users manage own queue entry
+- Leaderboard: public read, Functions write
+
+### Indexes file: `firestore.indexes.json`
+Composite indexes for matchmaking queries and leaderboard sorting.
+
+---
+
+## Step 12 — Deploy Cloud Functions
+
+```bash
+cd functions && npm install && npm run build
+cd .. && ./scripts/deploy_firebase.sh dev functions
+```
+
+### Callable functions:
+| Name | Purpose |
+|------|---------|
+| `joinMatchmakingQueue` | Pair players |
+| `scheduledMatchmakingCleanup` | Remove stale queue entries (cron) |
+| `submitMove` | Validate and apply online moves |
+| `finalizeRatedGame` | Internal — Elo update on rated game end |
+
+### Auth trigger:
+| Name | Purpose |
+|------|---------|
+| `onAuthUserCreate` | Create Firestore user profile + leaderboard entry |
+
+---
+
+## Step 13 — Local Emulators
+
+Terminal 1:
+```bash
+./scripts/run_emulators.sh dev
+```
+
+Terminal 2:
+```bash
+./scripts/run_flavor.sh dev
+```
+
+Emulator UI: http://localhost:4000
+
+| Service | Port |
+|---------|------|
+| Auth | 9099 |
+| Firestore | 8080 |
+| Functions | 5001 |
+| Emulator UI | 4000 |
+
+`config/env/dev.json` has `USE_FIREBASE_EMULATORS: true`.
+
+---
+
+## Step 14 — Test Security Rules
+
+With Firestore emulator running:
+```bash
+cd firebase/test && npm install && npm test
+```
+
+---
+
+## Step 15 — Test Flutter App
+
+```bash
+flutter test
+flutter analyze
+```
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `Firebase not initialized` | Run `./scripts/firebase_setup.sh dev` |
+| `google-services.json missing` | Run `flutterfire configure`; file is gitignored |
+| `PERMISSION_DENIED` on Firestore | Deploy rules: `./scripts/deploy_firebase.sh dev firestore` |
+| `NOT_FOUND` on Functions | Deploy functions; ensure Blaze plan |
+| Emulator connection refused | Start emulators first; Android uses `10.0.2.2` not `localhost` |
+| Google Sign-In fails Android | Add SHA-1 to Firebase Console |
+| Apple Sign-In rejected | Enable capability in Xcode + Firebase Console |
+| `indexes` error in Firestore | Deploy indexes or click link in error message |
+| Functions deploy lint fails | Run `cd functions && npm run lint` |
+| Linux `UnsupportedError` | Expected — Firebase not supported on Linux |
+
+---
+
+## Production Checklist
+
+- [ ] Three Firebase projects created (dev / staging / prod)
+- [ ] Blaze plan enabled on staging + prod
+- [ ] Authentication providers configured
+- [ ] `flutterfire configure` run per environment
+- [ ] SHA-1/SHA-256 added for Android release
+- [ ] Apple Sign-In configured for iOS
+- [ ] Firestore rules deployed
+- [ ] Firestore indexes deployed
+- [ ] Cloud Functions deployed
+- [ ] Security rules tests passing
+- [ ] Emulators tested locally
+- [ ] App Check enabled (recommended before prod launch)
+- [ ] Authorized domains configured for web
+- [ ] No secrets committed to git

@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Chess (dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "toolArgs": [
+        "--dart-define-from-file=config/env/dev.json",
+        "--flavor",
+        "dev"
+      ]
+    },
+    {
+      "name": "Chess (staging)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "toolArgs": [
+        "--dart-define-from-file=config/env/staging.json",
+        "--flavor",
+        "staging"
+      ]
+    },
+    {
+      "name": "Chess (prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "toolArgs": [
+        "--dart-define-from-file=config/env/prod.json",
+        "--flavor",
+        "prod"
+      ]
+    }
+  ]
+}

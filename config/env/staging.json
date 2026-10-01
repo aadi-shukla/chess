@@ -1,0 +1,8 @@
+{
+  "FLAVOR": "staging",
+  "APP_NAME": "Chess Staging",
+  "ENABLE_FIREBASE": "true",
+  "USE_FIREBASE_EMULATORS": "false",
+  "FIREBASE_PROJECT_ID": "chess-347ba",
+  "API_LOG_LEVEL": "info"
+}

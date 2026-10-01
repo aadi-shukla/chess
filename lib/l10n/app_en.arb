@@ -1,0 +1,305 @@
+{
+  "@@locale": "en",
+  "appTitle": "Chess",
+  "@appTitle": {
+    "description": "Application title shown in the app bar and system UI."
+  },
+  "splashLoading": "Loading…",
+  "@splashLoading": {
+    "description": "Message shown on the splash screen while the app initializes."
+  },
+  "homeWelcome": "Welcome to Chess",
+  "@homeWelcome": {
+    "description": "Headline on the home dashboard."
+  },
+  "homeSubtitle": "Play offline or challenge players online.",
+  "@homeSubtitle": {
+    "description": "Subtitle on the home dashboard."
+  },
+  "navHome": "Home",
+  "@navHome": {
+    "description": "Bottom navigation label for home."
+  },
+  "navPlay": "Play",
+  "@navPlay": {
+    "description": "Bottom navigation label for play."
+  },
+  "navLeaderboard": "Leaderboard",
+  "@navLeaderboard": {
+    "description": "Bottom navigation label for leaderboard."
+  },
+  "navProfile": "Profile",
+  "@navProfile": {
+    "description": "Bottom navigation label for profile."
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings screen title."
+  },
+  "settingsTheme": "Theme",
+  "@settingsTheme": {
+    "description": "Theme section label in settings."
+  },
+  "settingsThemeLight": "Light",
+  "@settingsThemeLight": {
+    "description": "Light theme option."
+  },
+  "settingsThemeDark": "Dark",
+  "@settingsThemeDark": {
+    "description": "Dark theme option."
+  },
+  "settingsThemeSystem": "System",
+  "@settingsThemeSystem": {
+    "description": "System theme option."
+  },
+  "flavorLabel": "Environment: {flavor}",
+  "@flavorLabel": {
+    "description": "Displays the current build flavor.",
+    "placeholders": {
+      "flavor": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "Coming soon",
+  "@comingSoon": {
+    "description": "Placeholder for features not yet implemented."
+  },
+  "authLoginTitle": "Sign in",
+  "@authLoginTitle": {
+    "description": "Login screen title."
+  },
+  "authLoginSubtitle": "Welcome back. Enter your credentials to continue.",
+  "@authLoginSubtitle": {
+    "description": "Login screen subtitle."
+  },
+  "authRegisterTitle": "Create account",
+  "@authRegisterTitle": {
+    "description": "Registration screen title."
+  },
+  "authRegisterSubtitle": "Join the chess community and track your rating.",
+  "@authRegisterSubtitle": {
+    "description": "Registration screen subtitle."
+  },
+  "authEmailLabel": "Email",
+  "@authEmailLabel": {
+    "description": "Email field label."
+  },
+  "authPasswordLabel": "Password",
+  "@authPasswordLabel": {
+    "description": "Password field label."
+  },
+  "authConfirmPasswordLabel": "Confirm password",
+  "@authConfirmPasswordLabel": {
+    "description": "Confirm password field label."
+  },
+  "authDisplayNameLabel": "Display name",
+  "@authDisplayNameLabel": {
+    "description": "Display name field label."
+  },
+  "authSignIn": "Sign in",
+  "@authSignIn": {
+    "description": "Sign in button."
+  },
+  "authRegister": "Register",
+  "@authRegister": {
+    "description": "Register link/button."
+  },
+  "authCreateAccount": "Create account",
+  "@authCreateAccount": {
+    "description": "Create account button."
+  },
+  "authForgotPassword": "Forgot password?",
+  "@authForgotPassword": {
+    "description": "Forgot password link."
+  },
+  "authForgotPasswordTitle": "Reset password",
+  "@authForgotPasswordTitle": {
+    "description": "Forgot password screen title."
+  },
+  "authForgotPasswordSubtitle": "Enter your email and we will send a reset link.",
+  "@authForgotPasswordSubtitle": {
+    "description": "Forgot password screen subtitle."
+  },
+  "authSendResetLink": "Send reset link",
+  "@authSendResetLink": {
+    "description": "Send password reset button."
+  },
+  "authContinueWithGoogle": "Continue with Google",
+  "@authContinueWithGoogle": {
+    "description": "Google sign-in button."
+  },
+  "authContinueAsGuest": "Continue as guest",
+  "@authContinueAsGuest": {
+    "description": "Anonymous sign-in button."
+  },
+  "authNoAccount": "Don't have an account?",
+  "@authNoAccount": {
+    "description": "Prompt before register link."
+  },
+  "authFirebaseUnavailable": "Online sign-in is unavailable. Configure Firebase to enable authentication.",
+  "@authFirebaseUnavailable": {
+    "description": "Shown when Firebase is not configured."
+  },
+  "authSignOut": "Sign out",
+  "@authSignOut": {
+    "description": "Sign out button."
+  },
+  "authDeleteAccount": "Delete account",
+  "@authDeleteAccount": {
+    "description": "Delete account button."
+  },
+  "authDeleteAccountTitle": "Delete account?",
+  "@authDeleteAccountTitle": {
+    "description": "Delete account dialog title."
+  },
+  "authDeleteAccountMessage": "This permanently deletes your account and cannot be undone.",
+  "@authDeleteAccountMessage": {
+    "description": "Delete account dialog message."
+  },
+  "authCancel": "Cancel",
+  "@authCancel": {
+    "description": "Cancel button."
+  },
+  "authGuestPlayer": "Guest Player",
+  "@authGuestPlayer": {
+    "description": "Default name for anonymous users."
+  },
+  "authGuestAccount": "Guest account",
+  "@authGuestAccount": {
+    "description": "Label for anonymous account chip."
+  },
+  "authRating": "Rating",
+  "@authRating": {
+    "description": "User rating label."
+  },
+  "playOfflineSubtitle": "Play on this device with a friend.",
+  "@playOfflineSubtitle": {
+    "description": "Subtitle on the play tab."
+  },
+  "playLocalGame": "Local game",
+  "@playLocalGame": {
+    "description": "Title for offline local game card."
+  },
+  "playLocalGameDescription": "Full rules, timers, undo, and move history.",
+  "@playLocalGameDescription": {
+    "description": "Description for offline local game card."
+  },
+  "playOnlineComingSoon": "Online matchmaking — coming soon",
+  "@playOnlineComingSoon": {
+    "description": "Placeholder for online play."
+  },
+  "playOnline": "Play online",
+  "@playOnline": {
+    "description": "Title for online multiplayer card."
+  },
+  "playOnlineDescription": "Realtime matchmaking with rated and casual games.",
+  "@playOnlineDescription": {
+    "description": "Description for online multiplayer card."
+  },
+  "playOnlineUnavailable": "Firebase is not configured on this build.",
+  "@playOnlineUnavailable": {
+    "description": "Snackbar when online play is unavailable."
+  },
+  "playOnlineSignInRequired": "Sign in with an account to play online.",
+  "@playOnlineSignInRequired": {
+    "description": "Snackbar when guest tries online play."
+  },
+  "playVsAi": "Play vs AI",
+  "@playVsAi": {
+    "description": "Title for AI game mode card."
+  },
+  "playVsAiDescription": "Challenge the computer at five difficulty levels.",
+  "@playVsAiDescription": {
+    "description": "Description for AI game mode card."
+  },
+  "playResumeGame": "Resume game",
+  "@playResumeGame": {
+    "description": "Title for resume saved game card."
+  },
+  "playResumeDescription": "{moveCount} moves · {mode}",
+  "@playResumeDescription": {
+    "description": "Resume card subtitle.",
+    "placeholders": {
+      "moveCount": { "type": "int" },
+      "mode": { "type": "String" }
+    }
+  },
+  "playStatistics": "Statistics",
+  "@playStatistics": {
+    "description": "Statistics card title."
+  },
+  "playStatisticsDescription": "{count} games played offline",
+  "@playStatisticsDescription": {
+    "description": "Statistics card subtitle.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "settingsGameTitle": "Offline game",
+  "@settingsGameTitle": {
+    "description": "Game settings section title."
+  },
+  "settingsDefaultTime": "Default time (minutes)",
+  "@settingsDefaultTime": {
+    "description": "Default clock time setting."
+  },
+  "settingsDefaultIncrement": "Default increment",
+  "@settingsDefaultIncrement": {
+    "description": "Default clock increment setting."
+  },
+  "settingsDefaultAiDifficulty": "Default AI difficulty",
+  "@settingsDefaultAiDifficulty": {
+    "description": "Default AI difficulty setting."
+  },
+  "settingsBoardTheme": "Board theme",
+  "@settingsBoardTheme": {
+    "description": "Board theme setting."
+  },
+  "settingsHaptics": "Move haptics",
+  "@settingsHaptics": {
+    "description": "Haptic feedback toggle."
+  },
+  "settingsAutoSave": "Auto-save games",
+  "@settingsAutoSave": {
+    "description": "Auto-save toggle title."
+  },
+  "settingsAutoSaveDescription": "Resume in-progress games from the Play tab.",
+  "@settingsAutoSaveDescription": {
+    "description": "Auto-save toggle subtitle."
+  },
+  "playSyncNow": "Sync",
+  "@playSyncNow": {
+    "description": "Manual cloud sync button."
+  },
+  "playSyncSyncing": "Syncing with cloud…",
+  "@playSyncSyncing": {
+    "description": "Sync in progress status."
+  },
+  "playSyncOffline": "Offline — changes will sync when connected",
+  "@playSyncOffline": {
+    "description": "Offline sync status."
+  },
+  "playSyncError": "Last sync failed — tap Sync to retry",
+  "@playSyncError": {
+    "description": "Sync error status."
+  },
+  "playSyncIdle": "Cloud save enabled",
+  "@playSyncIdle": {
+    "description": "Idle sync status."
+  },
+  "playSyncLastSynced": "Last synced {time}",
+  "@playSyncLastSynced": {
+    "description": "Last successful sync time.",
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "playSyncPending": "{count} changes pending sync",
+  "@playSyncPending": {
+    "description": "Pending sync operations count.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "chess-347ba",
+    "dev": "chess-347ba",
+    "staging": "chess-347ba",
+    "prod": "chess-347ba"
+  }
+}
